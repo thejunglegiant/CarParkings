@@ -14,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,14 +32,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MarkerComposable
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.thejunglegiant.carparkings.R
 import com.thejunglegiant.carparkings.data.models.ParkingSpotDTO
 import com.thejunglegiant.carparkings.ui.getActivity
+import com.thejunglegiant.carparkings.ui.theme.PrimaryColor
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.getViewModel
 
@@ -83,7 +90,13 @@ fun MapScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                content = { Icon(Icons.Filled.MoreVert, contentDescription = "") },
+                containerColor = PrimaryColor,
+                content = {
+                    Icon(
+                        painter = rememberAsyncImagePainter(R.drawable.ic_filter),
+                        contentDescription = null,
+                    )
+                },
                 onClick = {
                     showBottomSheet = true
                 }
@@ -119,6 +132,9 @@ fun MapScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
             cameraPositionState = cameraPositionState,
+            uiSettings = MapUiSettings(
+                zoomControlsEnabled = false,
+            ),
         ) {
             state.spots.forEach { spot ->
                 MarkerComposable(

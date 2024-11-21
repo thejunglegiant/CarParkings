@@ -87,6 +87,7 @@ fun CarNumberScreen(
                     .fillMaxWidth(),
                 value = text,
                 singleLine = true,
+                placeholder = { Text(text = "KA 9900 HH") },
                 onValueChange = { newText ->
                     text = newText
                 }

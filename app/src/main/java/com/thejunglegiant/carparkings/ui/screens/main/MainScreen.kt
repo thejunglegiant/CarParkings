@@ -2,10 +2,10 @@ package com.thejunglegiant.carparkings.ui.screens.main
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -28,6 +27,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -36,15 +36,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.thejunglegiant.carparkings.data.models.ParkingSpotDTO
 import com.thejunglegiant.carparkings.data.models.PaymentDTO
 import com.thejunglegiant.carparkings.ui.components.CpTabLayoutWithPager
-import com.thejunglegiant.carparkings.ui.theme.BlackShade900Color
-import com.thejunglegiant.carparkings.ui.theme.PrimaryColor
-import com.thejunglegiant.carparkings.ui.theme.WhiteColor
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -61,29 +57,25 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(text = "Паркування")
-                },
+                title = { Text(text = "Паркування", style = MaterialTheme.typography.titleLarge) },
                 actions = {
-                    IconButton(onClick = {
-                        onProfileClicked()
-                    }) {
+                    IconButton(onClick = { onProfileClicked() }) {
                         Icon(
-                            painter = rememberVectorPainter(Icons.Default.Person),
-                            contentDescription = null,
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Profile",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = WhiteColor,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
             CpTabLayoutWithPager(
                 tabs = listOf(
@@ -99,8 +91,7 @@ fun MainScreen(
                 when (index) {
                     MainScreenTabs.PARKING.index -> {
                         ParkingTabContent(
-                            modifier = Modifier
-                                .fillMaxSize(),
+                            modifier = Modifier.fillMaxSize(),
                             state = state,
                             onChooseParkingClicked = onChooseParkingClicked,
                             onPayClicked = {
@@ -113,8 +104,7 @@ fun MainScreen(
 
                     MainScreenTabs.PAYMENTS.index -> {
                         PaymentsTabContent(
-                            modifier = Modifier
-                                .fillMaxSize(),
+                            modifier = Modifier.fillMaxSize(),
                             payments = state.payments,
                         )
                     }
@@ -135,44 +125,40 @@ private fun ParkingTabContent(
 ) {
     Column(
         modifier = modifier
-            .padding(16.dp),
+            .padding(16.dp)
     ) {
-        Text(text = "Автомобіль")
-        Spacer(modifier = Modifier.height(12.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+        Text(
+            text = "Автомобіль",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             state.selectedCarNumber?.let { number ->
                 item {
                     Card(
-                        modifier = Modifier
-                            .height(64.dp),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 1.dp
-                        ),
-                        border = BorderStroke(
-                            width = 1.dp,
-                            color = PrimaryColor,
-                        ),
-                        colors = CardDefaults.cardColors(
-                            containerColor = WhiteColor,
-                        ),
+                        modifier = Modifier.height(80.dp),
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = CardDefaults.cardElevation(1.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         onClick = onAddNumberClicked
                     ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 16.dp),
-                            verticalArrangement = Arrangement.Center,
+                            verticalArrangement = Arrangement.Center
                         ) {
                             Text(
                                 text = "Моя автівка",
-                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = number.uppercase(),
-                                fontWeight = FontWeight.Normal,
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
@@ -180,126 +166,91 @@ private fun ParkingTabContent(
             }
             item {
                 Card(
-                    modifier = Modifier.size(64.dp),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 1.dp
-                    ),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = BlackShade900Color,
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = WhiteColor,
-                    ),
+                    modifier = Modifier.size(80.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = CardDefaults.cardElevation(1.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     onClick = onAddNumberClicked
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
+                        contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = null,
+                            contentDescription = "Add Car",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "Місце паркування")
-        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Місце паркування",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
         if (state.selectedSpot == null) {
-            Card(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 1.dp
-                ),
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = BlackShade900Color,
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = WhiteColor,
-                ),
-                onClick = onChooseParkingClicked,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f),
-                    ) {
-                        Text(
-                            text = "Обрати паркінг",
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Номер паркінгу має відповідати номеру на паркувальному знаці",
-                            fontWeight = FontWeight.Normal,
-                        )
-                    }
-                    Icon(
-                        modifier = Modifier.padding(16.dp),
-                        imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                    )
-                }
-            }
+            ParkingSpotCard(
+                title = "Обрати паркінг",
+                subtitle = "Номер паркінгу має відповідати номеру на паркувальному знаці",
+                onClick = onChooseParkingClicked
+            )
         } else {
-            Card(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 1.dp
-                ),
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = PrimaryColor,
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = WhiteColor,
-                ),
+            ParkingSpotCard(
+                title = "Паркінг №${state.selectedSpot.id}",
+                subtitle = "Паркінг обрано, переходьте до оплати",
                 onClick = onChooseParkingClicked,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f),
-                    ) {
-                        Text(
-                            text = "Паркінг №${state.selectedSpot.id}",
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Паркінг обрано, переходьте до оплати",
-                            fontWeight = FontWeight.Normal,
-                        )
-                    }
-                    Icon(
-                        modifier = Modifier.padding(16.dp),
-                        imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                    )
-                }
-            }
+                borderColor = MaterialTheme.colorScheme.primary
+            )
         }
+
         Spacer(modifier = Modifier.weight(1f))
+
         if (state.selectedSpot != null && state.selectedCarNumber != null) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onPayClicked,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryColor,
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text(text = "Оплатити")
+                Text(text = "Оплатити", style = MaterialTheme.typography.bodyLarge)
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ParkingSpotCard(
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+    borderColor: Color = MaterialTheme.colorScheme.outline
+) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(1.dp),
+        border = BorderStroke(1.dp, borderColor),
+        onClick = onClick
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }
@@ -307,41 +258,37 @@ private fun ParkingTabContent(
 @Composable
 private fun PaymentsTabContent(
     modifier: Modifier = Modifier,
-    payments: List<PaymentDTO>,
+    payments: List<PaymentDTO>
 ) {
     LazyColumn(
-        modifier = modifier
-            .padding(16.dp),
+        modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(payments) { item ->
+        items(payments.sortedByDescending { it.time }) { payment ->
             Card(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 1.dp
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = WhiteColor,
-                ),
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(1.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp),
+                    modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = item.time,
-                        fontWeight = FontWeight.Thin,
+                        text = payment.time,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "Паркінг №${item.parkingId}",
-                            fontWeight = FontWeight.Bold,
+                            text = "Паркінг №${payment.parkingId}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = "${item.price}\$",
-                            fontWeight = FontWeight.Bold,
+                            text = "${payment.price}\$",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }

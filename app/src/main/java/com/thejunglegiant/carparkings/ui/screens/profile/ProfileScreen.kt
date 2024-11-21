@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.thejunglegiant.carparkings.ui.theme.PrimaryColor
 import com.thejunglegiant.carparkings.ui.theme.WhiteColor
 
 @Composable
@@ -84,16 +85,15 @@ fun ProfileScreen() {
         ) {
             Button(
                 onClick = { /*TODO: Edit Profile*/ },
-                colors = ButtonDefaults.buttonColors(Color(0xFF008080))
+                colors = ButtonDefaults.buttonColors(PrimaryColor)
             ) {
-                Text(text = "Edit Profile")
+                Text(text = "Редагувати")
             }
 
-            Button(
+            OutlinedButton(
                 onClick = { /*TODO: Logout*/ },
-                colors = ButtonDefaults.buttonColors(Color(0xFF8B0000))
             ) {
-                Text(text = "Logout")
+                Text(text = "Вийти")
             }
         }
     }

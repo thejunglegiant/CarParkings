@@ -114,4 +114,10 @@ dependencies {
 
     // Maps
     implementation("com.google.maps.android:maps-compose:4.3.0")
+
+    // Worker
+    implementation("androidx.work:work-runtime-ktx:2.8.0")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }

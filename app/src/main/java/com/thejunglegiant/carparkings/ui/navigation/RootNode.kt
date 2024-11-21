@@ -21,6 +21,7 @@ import com.thejunglegiant.carparkings.ui.screens.carnumber.CarNumberScreen
 import com.thejunglegiant.carparkings.ui.screens.main.MainScreen
 import com.thejunglegiant.carparkings.ui.screens.map.MapScreen
 import com.thejunglegiant.carparkings.ui.screens.pay.PayScreen
+import com.thejunglegiant.carparkings.ui.screens.profile.ProfileScreen
 import kotlinx.parcelize.Parcelize
 
 class RootNode(
@@ -44,6 +45,8 @@ class RootNode(
         object Pay : NavTarget()
         @Parcelize
         object CarNumber : NavTarget()
+        @Parcelize
+        object Profile : NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -58,7 +61,10 @@ class RootNode(
                     },
                     onAddNumberClicked = {
                         backStack.singleTop(NavTarget.CarNumber)
-                    }
+                    },
+                    onProfileClicked = {
+                        backStack.push(NavTarget.Profile)
+                    },
                 )
             }
             NavTarget.Map -> node(buildContext) {
@@ -79,6 +85,9 @@ class RootNode(
                         backStack.pop()
                     }
                 )
+            }
+            NavTarget.Profile -> node(buildContext) {
+                ProfileScreen()
             }
         }
     }

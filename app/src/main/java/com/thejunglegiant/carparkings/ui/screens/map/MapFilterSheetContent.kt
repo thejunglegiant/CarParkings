@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -25,12 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MapFilterSheetContent(modifier: Modifier = Modifier) {
-    var regularSpotChecked by remember { mutableStateOf(false) }
-    var invalidSpotChecked by remember { mutableStateOf(false) }
-    var extendedSpotChecked by remember { mutableStateOf(false) }
-    var electricSpotChecked by remember { mutableStateOf(false) }
-    var sliderPosition by remember { mutableFloatStateOf(.5f) }
+fun MapFilterSheetContent(
+    modifier: Modifier = Modifier,
+    filtered: () -> Unit,
+) {
+    var regularSpotChecked by remember { mutableStateOf(true) }
+    var invalidSpotChecked by remember { mutableStateOf(true) }
+    var extendedSpotChecked by remember { mutableStateOf(true) }
+    var electricSpotChecked by remember { mutableStateOf(true) }
+    var sliderPosition by remember { mutableFloatStateOf(.3f) }
 
     Column(
         modifier = modifier
@@ -124,5 +128,14 @@ fun MapFilterSheetContent(modifier: Modifier = Modifier) {
             )
             Text(text = "до: ${(sliderPosition * 100).toInt()}грн")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+            onClick = filtered,
+        ) {
+            Text(text = "Фільтрувати")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

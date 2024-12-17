@@ -123,7 +123,12 @@ fun MapScreen(
                 },
                 sheetState = sheetState,
             ) {
-                MapFilterSheetContent()
+                MapFilterSheetContent(
+                    filtered = {
+                        showBottomSheet = false
+                        viewModel.updateLocations()
+                    },
+                )
             }
         }
 

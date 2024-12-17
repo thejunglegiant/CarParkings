@@ -24,7 +24,10 @@ import com.thejunglegiant.carparkings.ui.theme.PrimaryColor
 import com.thejunglegiant.carparkings.ui.theme.WhiteColor
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onEditClicked: () -> Unit,
+    onExitClicked: () -> Unit,
+) {
     // Fake user data
     val userName = "Олексій Морозов"
     val userEmail = "oleksii.morozov@gmail.com"
@@ -84,14 +87,14 @@ fun ProfileScreen() {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                onClick = { /*TODO: Edit Profile*/ },
+                onClick = onEditClicked,
                 colors = ButtonDefaults.buttonColors(PrimaryColor)
             ) {
                 Text(text = "Редагувати")
             }
 
             OutlinedButton(
-                onClick = { /*TODO: Logout*/ },
+                onClick = onExitClicked,
             ) {
                 Text(text = "Вийти")
             }
@@ -133,5 +136,5 @@ private fun ParkingStatsString() {
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen({}){}
 }

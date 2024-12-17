@@ -12,14 +12,23 @@ import com.thejunglegiant.carparkings.ui.theme.CarParkingsTheme
 import java.util.concurrent.TimeUnit
 
 class MainActivity : NodeActivity() {
+
+    companion object {
+        const val EXTRA_SHOW_NOTIFICATION = "EXTRA_SHOW_NOTIFICATION"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(1, TimeUnit.SECONDS)
-            .build()
+        val isShowNotification = intent.getBooleanExtra(EXTRA_SHOW_NOTIFICATION, true)
 
-        WorkManager.getInstance(this).enqueue(workRequest)
+        if (isShowNotification) {
+            val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInitialDelay(1, TimeUnit.SECONDS)
+                .build()
+
+            WorkManager.getInstance(this).enqueue(workRequest)
+        }
 
         setContent {
             CarParkingsTheme {

@@ -18,10 +18,12 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
 import com.thejunglegiant.carparkings.data.models.ParkingSpotDTO
 import com.thejunglegiant.carparkings.ui.screens.carnumber.CarNumberScreen
+import com.thejunglegiant.carparkings.ui.screens.login.LoginPage
 import com.thejunglegiant.carparkings.ui.screens.main.MainScreen
 import com.thejunglegiant.carparkings.ui.screens.map.MapScreen
 import com.thejunglegiant.carparkings.ui.screens.pay.PayScreen
 import com.thejunglegiant.carparkings.ui.screens.profile.ProfileScreen
+import com.thejunglegiant.carparkings.ui.screens.profile.UserEditScreen
 import kotlinx.parcelize.Parcelize
 
 class RootNode(
@@ -47,6 +49,10 @@ class RootNode(
         object CarNumber : NavTarget()
         @Parcelize
         object Profile : NavTarget()
+        @Parcelize
+        object UserEdit : NavTarget()
+        @Parcelize
+        object Login : NavTarget()
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -87,7 +93,25 @@ class RootNode(
                 )
             }
             NavTarget.Profile -> node(buildContext) {
-                ProfileScreen()
+                ProfileScreen(
+                    onEditClicked = {
+                        backStack.push(NavTarget.UserEdit)
+                    },
+                    onExitClicked = {
+                        backStack.push(NavTarget.Login)
+                    }
+                )
+            }
+            NavTarget.UserEdit -> node(buildContext) {
+                UserEditScreen(
+                    name = "Олексій",
+                    surname = "Морозов",
+                    email = "oleksii.m02@gmail.com",
+                    gender = "Чоловік", {},{},{},{},{backStack.pop()}
+                )
+            }
+            NavTarget.Login -> node(buildContext) {
+                LoginPage()
             }
         }
     }

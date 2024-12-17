@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.thejunglegiant.carparkings.MainActivity
 import com.thejunglegiant.carparkings.ui.getActivity
@@ -80,6 +79,7 @@ fun PayScreen() {
             Button(
                 onClick = {
                     val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra(MainActivity.EXTRA_SHOW_NOTIFICATION, false)
                     activity.startActivity(intent)
                     Runtime.getRuntime().exit(0)
                 },

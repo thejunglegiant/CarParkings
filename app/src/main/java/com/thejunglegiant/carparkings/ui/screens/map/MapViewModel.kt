@@ -22,6 +22,10 @@ class MapViewModel(
     val actions = _actions.asSharedFlow()
 
     init {
+        updateLocations()
+    }
+
+    fun updateLocations() {
         viewModelScope.launch {
             val locations = api.getLocations()
             _state.emit(
